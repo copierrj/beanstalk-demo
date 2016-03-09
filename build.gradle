@@ -1,0 +1,15 @@
+subprojects {
+
+	apply plugin: 'java'
+	apply plugin: 'application'
+}
+
+project(':consumer') {
+
+	mainClassName = 'Consumer'
+}
+
+project(':producer') {
+
+	mainClassName = 'Producer'
+}
