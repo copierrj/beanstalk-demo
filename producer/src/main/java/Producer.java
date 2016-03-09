@@ -10,8 +10,13 @@ public class Producer {
 	public static void main(String[] args) throws Exception {
 		System.out.println("Producer started");
 		
+		String host = System.getenv("BEANSTALK_HOST");
+		if(host == null) {
+			host = "localhost";
+		}
+		
 		Configuration config = new Configuration();
-	    config.setServiceHost("127.0.0.1");
+		config.setServiceHost(host);
 	    config.setServicePort(11300);
 	    
 	    BeanstalkClientFactory factory = new BeanstalkClientFactory(config);
