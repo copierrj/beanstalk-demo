@@ -2,6 +2,15 @@ subprojects {
 
 	apply plugin: 'java'
 	apply plugin: 'application'
+	apply plugin: 'eclipse'
+	
+	repositories {
+		mavenCentral()
+	}
+	
+	dependencies {
+		compile 'com.surftools:BeanstalkClient:1.4.6'
+	}
 }
 
 project(':consumer') {
