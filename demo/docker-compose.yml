@@ -1,0 +1,19 @@
+version: "2"
+
+services:
+  beanstalk:
+    image: schickling/beanstalkd
+    restart: always
+
+  producer:
+    image: producer
+    restart: always
+    stdin_open: true
+    environment:
+      BEANSTALK_HOST: beanstalk
+    
+  consumer:
+    image: consumer
+    restart: always
+    environment:
+      BEANSTALK_HOST: beanstalk
