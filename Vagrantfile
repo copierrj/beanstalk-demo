@@ -20,18 +20,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   # Forward the Docker daemon port:
   config.vm.network :forwarded_port, host: 2375, guest: 2375
   
-  # Forward several standard ports:
-  config.vm.network :forwarded_port, host: 80, guest: 80
-  config.vm.network :forwarded_port, host: 443, guest: 443
-  
   # Forward the zookeeper port:
   config.vm.network "forwarded_port", guest: 2181, host: 2181
   
-  # Forward the imro loader ports:
-  config.vm.network "forwarded_port", guest: 2010, host: 2010
-  config.vm.network "forwarded_port", guest: 1100, host: 1100
-  config.vm.network "forwarded_port", guest: 2000, host: 2000
-  config.vm.network "forwarded_port", guest: 1101, host: 1101
+  # Forward the beanstalk port:
+  config.vm.network "forwarded_port", guest: 11300, host: 11300
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
