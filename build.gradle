@@ -1,8 +1,19 @@
+buildscript {
+	repositories {
+		jcenter()
+	}
+
+	dependencies {
+		classpath 'com.bmuschko:gradle-docker-plugin:2.6.6'
+	}
+}
+
 subprojects {
 
 	apply plugin: 'java'
 	apply plugin: 'application'
 	apply plugin: 'eclipse'
+	apply plugin: 'com.bmuschko.docker-java-application'
 	
 	repositories {
 		mavenCentral()
