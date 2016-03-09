@@ -17,3 +17,5 @@ if [[ ! -e /usr/local/bin/docker-compose ]]; then
 	chmod +x /usr/local/bin/docker-compose
 	
 fi
+
+cp /vagrant/scripts/beanstalkd-settings /etc/default/beanstalkd
