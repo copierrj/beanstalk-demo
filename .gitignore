@@ -1,3 +1,7 @@
 build/
 .vagrant/
 .gradle/
+.classpath 
+.settings 
+.project 
+bin/ 
