@@ -9,7 +9,7 @@ subprojects {
 	}
 	
 	dependencies {
-		compile 'com.surftools:BeanstalkClient:1.4.6'
+		compile 'com.dinstone:beanstalkc:2.2.0'
 	}
 }
 

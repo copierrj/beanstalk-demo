@@ -1,16 +1,21 @@
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-import com.surftools.BeanstalkClient.Client;
-import com.surftools.BeanstalkClientImpl.ClientImpl;
+import com.dinstone.beanstalkc.BeanstalkClientFactory;
+import com.dinstone.beanstalkc.Configuration;
+import com.dinstone.beanstalkc.JobProducer;
 
 public class Producer {
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println("Producer started");
 		
-		Client client = new ClientImpl();
-		client.useTube("demo");
+		Configuration config = new Configuration();
+	    config.setServiceHost("127.0.0.1");
+	    config.setServicePort(11300);
+	    
+	    BeanstalkClientFactory factory = new BeanstalkClientFactory(config);
+	    JobProducer producer = factory.createJobProducer("demo");
 		
 		try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
 			for(;;) {
@@ -26,9 +31,9 @@ public class Producer {
 				if(command.toLowerCase().startsWith("put")) {
 					String message = command.substring(4).trim();
 					
-					client.put(0, 0, 1, message.getBytes("utf-8"));
+					long jobId = producer.putJob(0, 0, 1, message.getBytes("utf-8"));
 					
-					System.out.println("put message: '" + message + "'");
+					System.out.println("put message: '" + message + "', jobId: " + jobId);
 					continue;
 				}
 				
