@@ -1,11 +1,12 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.util.Random;
 
 import com.dinstone.beanstalkc.BeanstalkClientFactory;
 import com.dinstone.beanstalkc.Configuration;
 import com.dinstone.beanstalkc.JobProducer;
 
 public class Producer {
+	
+	private static final String CHARACTERS = "abcdefghijklmnopqrstuvwxyz0123456789";
 	
 	public static void main(String[] args) throws Exception {
 		System.out.println("Producer started");
@@ -17,35 +18,29 @@ public class Producer {
 		
 		Configuration config = new Configuration();
 		config.setServiceHost(host);
-	    config.setServicePort(11300);
-	    
-	    BeanstalkClientFactory factory = new BeanstalkClientFactory(config);
-	    JobProducer producer = factory.createJobProducer("demo");
+		config.setServicePort(11300);
 		
-		try(BufferedReader br = new BufferedReader(new InputStreamReader(System.in))) {
-			for(;;) {
-				System.out.print("> ");
-				System.out.flush();
-				
-				String command = br.readLine().trim();
-				
-				if(command.equalsIgnoreCase("exit")) {
-					break;
-				}
-				
-				if(command.toLowerCase().startsWith("put")) {
-					String message = command.substring(4).trim();
-					
-					long jobId = producer.putJob(0, 0, 1, message.getBytes("utf-8"));
-					
-					System.out.println("put message: '" + message + "', jobId: " + jobId);
-					continue;
-				}
-				
-				System.out.println("unknown command: '" + command + "'");
-			}
+		BeanstalkClientFactory factory = new BeanstalkClientFactory(config);
+		JobProducer producer = factory.createJobProducer("demo");
+		
+		Random r = new Random();
+		
+		for(;;) {
+			Thread.sleep(r.nextInt(1000));
+			
+			String message = randomString(r, 20);
+			long jobId = producer.putJob(0, 0, 1, message.getBytes("utf-8"));
+			
+			System.out.println("put message: '" + message + "', jobId: " + jobId);
+		}
+	}
+	
+	public static String randomString(Random r, int length) {
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < length; i++) {
+			sb.append(CHARACTERS.charAt(r.nextInt(CHARACTERS.length())));
 		}
 		
-		System.out.println("Producer terminated");
+		return sb.toString();
 	}
 }
