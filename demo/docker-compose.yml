@@ -8,7 +8,6 @@ services:
   producer:
     image: producer
     restart: always
-    stdin_open: true
     environment:
       BEANSTALK_HOST: beanstalk
     
