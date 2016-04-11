@@ -19,7 +19,6 @@ public class Consumer {
 		JobProcessorFactory
 			.newInstance()
 			.host(host)
-			.port(11300)
 			.tube("demo")
 			.touchDelay(1, TimeUnit.SECONDS)
 			.create()

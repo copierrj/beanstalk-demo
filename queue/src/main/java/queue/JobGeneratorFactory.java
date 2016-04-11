@@ -10,7 +10,9 @@ public class JobGeneratorFactory {
 
 	private String host, tube;
 	
-	private Integer port, ttr;
+	private int port = 11300;
+	
+	private Integer ttr;
 	
 	private int priority = 0, delay = 0;
 	
@@ -51,7 +53,7 @@ public class JobGeneratorFactory {
 	public JobGenerator<byte[]> create() {
 		Configuration config = new Configuration();
 		config.setServiceHost(Objects.requireNonNull(host, "host not set"));
-		config.setServicePort(Objects.requireNonNull(port, "port not set"));
+		config.setServicePort(port);
 		
 		BeanstalkClientFactory factory = new BeanstalkClientFactory(config);
 		JobProducer producer = factory.createJobProducer(

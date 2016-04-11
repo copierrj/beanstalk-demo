@@ -11,7 +11,7 @@ public class JobProcessorFactory {
 	
 	private String host, tube;
 			
-	private Integer port;
+	private int port = 11300;
 	
 	private Long touchDelay;
 	
@@ -49,7 +49,7 @@ public class JobProcessorFactory {
 	public JobProcessor<byte[]> create() {
 		Configuration config = new Configuration();
 		config.setServiceHost(Objects.requireNonNull(host, "host not set"));
-		config.setServicePort(Objects.requireNonNull(port, "port not set"));
+		config.setServicePort(port);
 		
 		BeanstalkClientFactory factory = new BeanstalkClientFactory(config);
 		JobConsumer consumer = factory.createJobConsumer(

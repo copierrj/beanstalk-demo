@@ -20,7 +20,6 @@ public class Producer {
 		JobGeneratorFactory
 			.newInstance()
 			.host(host)
-			.port(11300)
 			.tube("demo")
 			.timeToRun(1)
 			.create()
