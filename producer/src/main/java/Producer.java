@@ -1,4 +1,3 @@
-import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
 import queue.JobGeneratorFactory;
@@ -23,27 +22,17 @@ public class Producer {
 			.tube("demo")
 			.timeToRun(1)
 			.create()
-				.map((String s) -> {
-					try {
-						return s.getBytes("utf-8");
-					} catch(UnsupportedEncodingException e) {
-						throw new RuntimeException(e);
-					}
-				})
+				.map((String s) -> s.getBytes("utf-8"))
 				.supply(() -> {
-					try {
-						int delay = r.nextInt(10000);
-						System.out.println("waiting " + delay + "ms");
-						
-						Thread.sleep(delay);
-						
-						String message = randomString(r, 20);
-						System.out.println("supplying message: '" + message + "'");
-						
-						return message;
-					} catch(InterruptedException e) {
-						throw new RuntimeException(e);
-					}
+					int delay = r.nextInt(10000);
+					System.out.println("waiting " + delay + "ms");
+					
+					Thread.sleep(delay);
+					
+					String message = randomString(r, 20);
+					System.out.println("supplying message: '" + message + "'");
+					
+					return message;
 				});
 	}
 	

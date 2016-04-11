@@ -4,7 +4,6 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.function.Function;
 
 import com.dinstone.beanstalkc.Job;
@@ -27,13 +26,13 @@ public class JobProcessor<T> {
 		this.touchTimeUnit = touchTimeUnit;
 	}
 	
-	public <U> JobProcessor<U> map(Function<T, U> mapper) {
+	public <U> JobProcessor<U> map(ThrowingFunction<T, U> mapper) {
 		return new JobProcessor<U>(jobConsumer, 
 			b -> mapper.apply(this.mapper.apply(b)),
 			touchDelay, touchTimeUnit); 
 	}
 	
-	public void consume(Consumer<T> consumer) {
+	public void consume(ThrowingConsumer<T> consumer) {
 		ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
 		
 		for(;;) {			

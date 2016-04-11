@@ -1,7 +1,6 @@
 package queue;
 
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 import com.dinstone.beanstalkc.JobProducer;
 
@@ -21,12 +20,12 @@ public class JobGenerator<T> {
 		this.ttr = ttr;
 	}
 	
-	public <U> JobGenerator<U> map(Function<U, T> mapper) {
+	public <U> JobGenerator<U> map(ThrowingFunction<U, T> mapper) {
 		return new JobGenerator<U>(producer, u -> this.mapper.apply(mapper.apply(u)),
 				priority, delay, ttr);
 	}
 	
-	public void supply(Supplier<T> supplier) {
+	public void supply(ThrowingSupplier<T> supplier) {
 		for(;;) {
 			supply(supplier.get());
 		}

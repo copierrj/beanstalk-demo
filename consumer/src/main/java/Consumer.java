@@ -1,4 +1,3 @@
-import java.io.UnsupportedEncodingException;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -22,25 +21,15 @@ public class Consumer {
 			.tube("demo")
 			.touchDelay(1, TimeUnit.SECONDS)
 			.create()
-				.map(b -> {
-					try {
-						return new String(b, "utf-8");
-					} catch(UnsupportedEncodingException e) {
-						throw new RuntimeException(e);
-					}
-				})
+				.map(b -> new String(b, "utf-8"))
 				.consume(s -> {
-					try {
-						System.out.println("message received: '" + s + "'");
-						
-						int delay = r.nextInt(10000);
-						System.out.println("waiting " + delay + "ms");
-						
-						Thread.sleep(delay);
-						System.out.println("done");
-					} catch(InterruptedException e) {
-						throw new RuntimeException(e);
-					}
+					System.out.println("message received: '" + s + "'");
+					
+					int delay = r.nextInt(10000);
+					System.out.println("waiting " + delay + "ms");
+					
+					Thread.sleep(delay);
+					System.out.println("done");
 				});
 	}
 }
