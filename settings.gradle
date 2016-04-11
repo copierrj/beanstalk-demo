@@ -1,1 +1,1 @@
-include 'consumer', 'producer'
+include 'queue', 'consumer', 'producer'

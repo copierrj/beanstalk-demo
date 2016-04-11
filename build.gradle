@@ -14,24 +14,32 @@ import com.bmuschko.gradle.docker.tasks.image.DockerBuildImage
 subprojects {
 
 	apply plugin: 'java'
-	apply plugin: 'application'
 	apply plugin: 'eclipse'
-	apply plugin: 'com.bmuschko.docker-remote-api'
 	
 	repositories {
 		mavenCentral()
 	}
-	
+}
+
+project(':queue') {
 	dependencies {
 		compile 'com.dinstone:beanstalkc:2.2.0'
 	}
+}
+
+configure([
+	project(':consumer'),
+	project(':producer')]) {
+	
+	apply plugin: 'application'
+	apply plugin: 'com.bmuschko.docker-remote-api'
 	
 	task copyTar(type: Copy) {
 		dependsOn distTar
 		from "${project.buildDir}/distributions/${project.name}.tar"
 		into "${project.buildDir}/docker"
 	}
-	
+
 	task createDockerfile(type: Dockerfile) {
 		dependsOn copyTar
 		destFile = project.file('build/docker/Dockerfile')
@@ -40,11 +48,15 @@ subprojects {
 		runCommand "cd /opt; tar -xvf ${project.name}.tar; rm ${project.name}.tar; chmod u+x ${project.name}/bin/${project.name}"
 		defaultCommand "/opt/${project.name}/bin/${project.name}"
 	}
-	
+
 	task buildImage(type: DockerBuildImage) {
 		dependsOn createDockerfile
 		inputDir = project.file('build/docker')
 		tag = "${project.name}"
+	}
+	
+	dependencies {
+		compile project(':queue')
 	}
 }
 
