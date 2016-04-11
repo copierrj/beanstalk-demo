@@ -1,7 +1,8 @@
-import com.dinstone.beanstalkc.BeanstalkClientFactory;
-import com.dinstone.beanstalkc.Configuration;
-import com.dinstone.beanstalkc.Job;
-import com.dinstone.beanstalkc.JobConsumer;
+import java.io.UnsupportedEncodingException;
+import java.util.Random;
+import java.util.concurrent.TimeUnit;
+
+import queue.JobProcessorFactory;
 
 public class Consumer {
 	
@@ -13,21 +14,34 @@ public class Consumer {
 			host = "localhost";
 		}
 		
-		Configuration config = new Configuration();
-	    config.setServiceHost(host);
-	    config.setServicePort(11300);
-	    
-	    BeanstalkClientFactory factory = new BeanstalkClientFactory(config);
-	    JobConsumer consumer = factory.createJobConsumer("demo");
+		Random r = new Random();
 		
-		for(;;) {
-			Job job = consumer.reserveJob(0);
-			long jobId = job.getId();
-			
-			String message = new String(job.getData(), "utf-8");
-			System.out.println("message received: '" + message + "', jobId: " + jobId);
-			
-			consumer.deleteJob(jobId);
-		}
+		JobProcessorFactory
+			.newInstance()
+			.host(host)
+			.port(11300)
+			.tube("demo")
+			.touchDelay(1, TimeUnit.SECONDS)
+			.create()
+				.map(b -> {
+					try {
+						return new String(b, "utf-8");
+					} catch(UnsupportedEncodingException e) {
+						throw new RuntimeException(e);
+					}
+				})
+				.consume(s -> {
+					try {
+						System.out.println("message received: '" + s + "'");
+						
+						int delay = r.nextInt(10000);
+						System.out.println("waiting " + delay + "ms");
+						
+						Thread.sleep(delay);
+						System.out.println("done");
+					} catch(InterruptedException e) {
+						throw new RuntimeException(e);
+					}
+				});
 	}
 }

@@ -26,10 +26,13 @@ public class Producer {
 		Random r = new Random();
 		
 		for(;;) {
-			Thread.sleep(r.nextInt(1000));
+			int delay = r.nextInt(10000);
+			System.out.println("waiting " + delay + "ms");
+			
+			Thread.sleep(delay);
 			
 			String message = randomString(r, 20);
-			long jobId = producer.putJob(0, 0, 1, message.getBytes("utf-8"));
+			long jobId = producer.putJob(0, 0, 2, message.getBytes("utf-8"));
 			
 			System.out.println("put message: '" + message + "', jobId: " + jobId);
 		}
