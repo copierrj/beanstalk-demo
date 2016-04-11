@@ -16,3 +16,12 @@ services:
     restart: always
     environment:
       BEANSTALK_HOST: beanstalk
+      
+  console:
+    image: agaveapi/beanstalkd-console
+    restart: always
+    environment:
+      BEANSTALKD_HOST: beanstalk
+    ports:
+      - "80:80"
+      - "443:443"

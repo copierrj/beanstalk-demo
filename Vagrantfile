@@ -25,6 +25,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   
   # Forward the beanstalk port:
   config.vm.network "forwarded_port", guest: 11300, host: 11300
+  
+  # Forward the console ports:
+  config.vm.network "forwarded_port", guest: 80, host: 80
+  config.vm.network "forwarded_port", guest: 443, host: 443
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
