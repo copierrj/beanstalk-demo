@@ -1,8 +1,7 @@
+import java.io.UnsupportedEncodingException;
 import java.util.Random;
 
-import com.dinstone.beanstalkc.BeanstalkClientFactory;
-import com.dinstone.beanstalkc.Configuration;
-import com.dinstone.beanstalkc.JobProducer;
+import queue.JobGeneratorFactory;
 
 public class Producer {
 	
@@ -16,26 +15,37 @@ public class Producer {
 			host = "localhost";
 		}
 		
-		Configuration config = new Configuration();
-		config.setServiceHost(host);
-		config.setServicePort(11300);
-		
-		BeanstalkClientFactory factory = new BeanstalkClientFactory(config);
-		JobProducer producer = factory.createJobProducer("demo");
-		
 		Random r = new Random();
 		
-		for(;;) {
-			int delay = r.nextInt(10000);
-			System.out.println("waiting " + delay + "ms");
-			
-			Thread.sleep(delay);
-			
-			String message = randomString(r, 20);
-			long jobId = producer.putJob(0, 0, 2, message.getBytes("utf-8"));
-			
-			System.out.println("put message: '" + message + "', jobId: " + jobId);
-		}
+		JobGeneratorFactory
+			.newInstance()
+			.host(host)
+			.port(11300)
+			.tube("demo")
+			.timeToRun(1)
+			.create()
+				.map((String s) -> {
+					try {
+						return s.getBytes("utf-8");
+					} catch(UnsupportedEncodingException e) {
+						throw new RuntimeException(e);
+					}
+				})
+				.supply(() -> {
+					try {
+						int delay = r.nextInt(10000);
+						System.out.println("waiting " + delay + "ms");
+						
+						Thread.sleep(delay);
+						
+						String message = randomString(r, 20);
+						System.out.println("supplying message: '" + message + "'");
+						
+						return message;
+					} catch(InterruptedException e) {
+						throw new RuntimeException(e);
+					}
+				});
 	}
 	
 	public static String randomString(Random r, int length) {
