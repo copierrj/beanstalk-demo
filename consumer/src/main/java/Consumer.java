@@ -1,5 +1,4 @@
 import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import queue.JobProcessorFactory;
 
@@ -19,7 +18,7 @@ public class Consumer {
 			.newInstance()
 			.host(host)
 			.tube("demo")
-			.touchDelay(1, TimeUnit.SECONDS)
+			.touchDelay(1)
 			.create()
 				.map(b -> new String(b, "utf-8"))
 				.consume(s -> {

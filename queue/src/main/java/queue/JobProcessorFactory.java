@@ -14,9 +14,7 @@ public class JobProcessorFactory {
 	private int port = 11300;
 	
 	private Long touchDelay;
-	
-	private TimeUnit touchTimeUnit;
-	
+		
 	JobProcessorFactory() {
 		
 	}
@@ -40,9 +38,8 @@ public class JobProcessorFactory {
 		return this;
 	}
 	
-	public JobProcessorFactory touchDelay(long delay, TimeUnit timeUnit) {
+	public JobProcessorFactory touchDelay(long delay) {
 		this.touchDelay = delay;
-		this.touchTimeUnit = Objects.requireNonNull(timeUnit, "timeUnit must not be null");
 		return this;
 	}
 	
@@ -57,6 +54,6 @@ public class JobProcessorFactory {
 		
 		return new JobProcessor<byte[]>(consumer, t -> t,
 				Objects.requireNonNull(touchDelay, "touchDelay not set"),
-				Objects.requireNonNull(touchTimeUnit, "touchTimeUnit not set"));
+				TimeUnit.SECONDS);
 	}
 }

@@ -20,7 +20,7 @@ public class Producer {
 			.newInstance()
 			.host(host)
 			.tube("demo")
-			.timeToRun(1)
+			.timeToRun(2)
 			.create()
 				.map((String s) -> s.getBytes("utf-8"))
 				.supply(() -> {
