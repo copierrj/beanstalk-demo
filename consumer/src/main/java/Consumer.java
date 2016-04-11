@@ -12,13 +12,15 @@ public class Consumer {
 			host = "localhost";
 		}
 		
+		int touchDelay = Integer.parseInt(System.getenv("TOUCH_DELAY"));
+		
 		Random r = new Random();
 		
 		JobProcessorFactory
 			.newInstance()
 			.host(host)
 			.tube("demo")
-			.touchDelay(1)
+			.touchDelay(touchDelay)
 			.create()
 				.map(b -> new String(b, "utf-8"))
 				.consume(s -> {

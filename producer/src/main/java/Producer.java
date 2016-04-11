@@ -14,13 +14,15 @@ public class Producer {
 			host = "localhost";
 		}
 		
+		int ttr = Integer.parseInt(System.getenv("TIME_TO_RUN"));
+		
 		Random r = new Random();
 		
 		JobGeneratorFactory
 			.newInstance()
 			.host(host)
 			.tube("demo")
-			.timeToRun(2)
+			.timeToRun(ttr)
 			.create()
 				.map((String s) -> s.getBytes("utf-8"))
 				.supply(() -> {

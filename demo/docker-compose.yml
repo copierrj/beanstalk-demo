@@ -10,12 +10,14 @@ services:
     restart: always
     environment:
       BEANSTALK_HOST: beanstalk
+      TIME_TO_RUN: 2
     
   consumer:
     image: consumer
     restart: always
     environment:
       BEANSTALK_HOST: beanstalk
+      TOUCH_DELAY: 1
       
   console:
     image: agaveapi/beanstalkd-console
