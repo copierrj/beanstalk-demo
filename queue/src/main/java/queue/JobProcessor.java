@@ -35,7 +35,7 @@ public class JobProcessor<T> {
 	public void consume(ThrowingConsumer<T> consumer) {
 		ScheduledExecutorService executor = new ScheduledThreadPoolExecutor(1);
 		
-		for(;;) {			
+		for(;;) {
 			Job job = jobConsumer.reserveJob(0);
 			long jobId = job.getId();
 			
@@ -43,13 +43,19 @@ public class JobProcessor<T> {
 			
 			ScheduledFuture<?> future = executor.scheduleAtFixedRate(() -> {
 				System.out.println("touching job");
-				jobConsumer.touchJob(jobId);
+				if(!jobConsumer.touchJob(jobId)) {
+					System.err.println("failed to touch job");
+					System.exit(1);
+				}
 			}, touchDelay, touchDelay, touchTimeUnit);
 			
 			consumer.accept(mapper.apply(job.getData()));
 			
 			future.cancel(false);
-			jobConsumer.deleteJob(jobId);
+			if(!jobConsumer.deleteJob(jobId)) {
+				System.err.println("failed to delete job");
+				System.exit(1);
+			}
 		}
 	}
 }
