@@ -1,1 +1,2 @@
+rootProject.name = 'beanstalkdemo'
 include 'queue', 'consumer', 'producer'

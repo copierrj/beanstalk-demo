@@ -6,14 +6,14 @@ services:
     restart: always
 
   producer:
-    image: producer
+    image: copierrj/beanstalkdemo_producer
     restart: always
     environment:
       BEANSTALK_HOST: beanstalk
       TIME_TO_RUN: 2
     
   consumer:
-    image: consumer
+    image: copierrj/beanstalkdemo_consumer
     restart: always
     environment:
       BEANSTALK_HOST: beanstalk

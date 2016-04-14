@@ -52,7 +52,7 @@ configure([
 	task buildImage(type: DockerBuildImage) {
 		dependsOn createDockerfile
 		inputDir = project.file('build/docker')
-		tag = "${project.name}"
+		tag = "copierrj/${rootProject.name}_${project.name}"
 	}
 	
 	dependencies {
